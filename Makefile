@@ -9,7 +9,8 @@ SRCS= DefaultTypes.cpp EditWindow.cpp main.cpp MainWindow.cpp ResourceEdit.cpp \
 	settings/GenericSettingsView.cpp ResourceRow.cpp support/UndoContext.cpp \
 	SettingsWindow.cpp SettingsFile.cpp
 RSRCS=
-LIBS= #/boot/system/lib/libroot.so /boot/system/lib/libbe.so
+LIBS=
+RDEFS= ResourceEdit.rdef
 LIBPATHS=
 SYSTEM_INCLUDE_PATHS= \
 	/boot/develop/headers/be \
