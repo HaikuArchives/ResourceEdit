@@ -3,13 +3,11 @@ TYPE= APP
 SRCS= DefaultTypes.cpp EditWindow.cpp main.cpp MainWindow.cpp ResourceEdit.cpp \
 	ResourceListView.cpp edits/NormalEdit.cpp edits/EditView.cpp \
 	edits/BooleanEdit.cpp edits/AppFlagsEdit.cpp interface/ImageButton.cpp \
-	interface/ColumnListView.cpp \
-	interface/ColumnTypes.cpp \
 	interface/AboutWindow.cpp \
 	settings/GenericSettingsView.cpp ResourceRow.cpp support/UndoContext.cpp \
 	SettingsWindow.cpp SettingsFile.cpp
 RSRCS=
-LIBS= be root $(STDCPPLIBS) translation tracker
+LIBS= be root $(STDCPPLIBS) translation tracker columnlistview
 RDEFS= ResourceEdit.rdef
 LIBPATHS=
 SYSTEM_INCLUDE_PATHS= \
@@ -17,8 +15,7 @@ SYSTEM_INCLUDE_PATHS= \
 	/system/develop/headers/private/support \
 	/system/develop/headers/private/shared \
 	/system/develop/headers/private/locale
-LOCAL_INCLUDE_PATHS= support settings interface edits
-OPTIMIZE=NONE
+OPTIMIZE=SOME
 #	specify any preprocessor symbols to be defined.  The symbols will not
 #	have their values set automatically; you must supply the value (if any)
 #	to use.  For example, setting DEFINES to "DEBUG=1" will cause the
