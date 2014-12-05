@@ -9,18 +9,14 @@ SRCS= DefaultTypes.cpp EditWindow.cpp main.cpp MainWindow.cpp ResourceEdit.cpp \
 	settings/GenericSettingsView.cpp ResourceRow.cpp support/UndoContext.cpp \
 	SettingsWindow.cpp SettingsFile.cpp
 RSRCS=
-LIBS=
+LIBS= be root $(STDCPPLIBS) translation tracker
 RDEFS= ResourceEdit.rdef
 LIBPATHS=
 SYSTEM_INCLUDE_PATHS= \
-	/boot/develop/headers/be \
 	/system/develop/headers/private/interface \
 	/system/develop/headers/private/support \
 	/system/develop/headers/private/shared \
-	/system/develop/headers/private/locale \
-	/boot/develop/headers/cpp \
-	/boot/develop/headers/posix \
-	/boot/home/config/include
+	/system/develop/headers/private/locale
 LOCAL_INCLUDE_PATHS= support settings interface edits
 OPTIMIZE=NONE
 #	specify any preprocessor symbols to be defined.  The symbols will not
@@ -37,7 +33,6 @@ WARNINGS =
 # Build with debugging symbols if set to TRUE
 SYMBOLS=
 COMPILER_FLAGS=
-LINKER_FLAGS=-lbe -lroot -lstdc++ -ltranslation -ltracker
 
 ## include the makefile-engine
 DEVEL_DIRECTORY := \
