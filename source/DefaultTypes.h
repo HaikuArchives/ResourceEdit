@@ -19,7 +19,7 @@ struct ResourceType {
 			const char* 	type;
 			const char*		code;
 			const char* 	data;
-			uint32			size;
+			int32			size;
 			EditView*		edit;
 
 	static	int32			FindIndex(const char* type);

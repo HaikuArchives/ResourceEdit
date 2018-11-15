@@ -653,7 +653,6 @@ MainWindow::_Load()
 	// CAUTION: Here be dragons.
 
 	// [Initialization phase]
-
 	BPath path;
 	struct stat st;
 
@@ -922,7 +921,7 @@ MainWindow::_Load()
 
 	// Killed code: Import from .rsrc
 
-	/*BFile* file = new BFile(fAssocEntry, B_READ_ONLY);
+	BFile* file = new BFile(fAssocEntry, B_READ_ONLY);
 	BResources input(file);
 	delete file;
 
@@ -937,9 +936,9 @@ MainWindow::_Load()
 		row->SetResourceName(name);
 		row->SetResourceSize(size);
 		row->SetResourceCode(code);
-		row->SetResourceRawData(input.LoadResource(code, id, &size));
+		row->SetResourceData((char*)input.LoadResource(code, id, &size));
 		fResourceList->AddRow(row);
-	}*/
+	}
 }
 
 
