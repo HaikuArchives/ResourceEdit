@@ -630,7 +630,7 @@ MainWindow::_Save(BEntry* entry)
 
 	// Killed code: Export to .rsrc
 
-	/*BFile* file = new BFile(entry, B_READ_WRITE | B_CREATE_FILE);
+	BFile* file = new BFile(entry, B_READ_WRITE | B_CREATE_FILE);
 	BResources output(file, true);
 	delete file;
 
@@ -638,10 +638,10 @@ MainWindow::_Save(BEntry* entry)
 		ResourceRow* row = (ResourceRow*)fResourceList->RowAt(i);
 
 		output.AddResource(row->ResourceCode(), row->ResourceID(),
-			row->ResourceRawData(), row->ResourceSize(), row->ResourceName());
+			row->ResourceData(), row->ResourceSize(), row->ResourceName());
 	}
 
-	output.Sync();*/
+	output.Sync();
 
 	fUnsavedChanges = false;
 }
