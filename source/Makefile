@@ -3,6 +3,7 @@ TYPE= APP
 SRCS= DefaultTypes.cpp EditWindow.cpp main.cpp MainWindow.cpp ResourceEdit.cpp \
 	ResourceListView.cpp edits/NormalEdit.cpp edits/EditView.cpp \
 	edits/BooleanEdit.cpp edits/AppFlagsEdit.cpp interface/ImageButton.cpp \
+	interface/AboutWindow.cpp \
 	settings/GenericSettingsView.cpp ResourceRow.cpp support/UndoContext.cpp \
 	SettingsWindow.cpp SettingsFile.cpp
 RSRCS=
