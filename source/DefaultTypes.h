@@ -19,7 +19,7 @@ struct ResourceType {
 			const char* 	type;
 			const char*		code;
 			const char* 	data;
-			int32			size;
+			uint32			size;
 			EditView*		edit;
 
 	static	int32			FindIndex(const char* type);
@@ -30,7 +30,7 @@ struct ResourceType {
 };
 
 
-#define LINE	"", "", "", ~0, NULL
+#define LINE	"", "", "", 0, NULL
 #define END		NULL, NULL, NULL, 0, NULL
 
 const ResourceType kDefaultTypes[] = {
