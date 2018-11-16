@@ -934,7 +934,8 @@ MainWindow::_Load()
 		ResourceRow* row = new ResourceRow();
 		row->SetResourceID(id);
 		// There's currently no support for CSTR, ARRAY...
-		row->SetResourceType(ResourceType::FindIndex(code));
+		int32 ix = ResourceType::FindIndex(code);
+		row->SetResourceType(kDefaultTypes[ix != -1 ? ix : 0].type);
 		row->SetResourceName(name);
 		row->SetResourceSize(size);
 		row->SetResourceCode(code);
