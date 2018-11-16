@@ -933,10 +933,8 @@ MainWindow::_Load()
 	for (int32 i = 0; input.GetResourceInfo(i, &code, &id, &name, &size); i++) {
 		ResourceRow* row = new ResourceRow();
 		row->SetResourceID(id);
-		// For some reason imported resources have a resource code but not type...
-		// This will set the resource type to default type.
-		// There should be a function to convert ResourceCode to ResourceType.
-		row->SetResourceType(kDefaultTypes[0].type);
+		// There's currently no support for CSTR, ARRAY...
+		row->SetResourceType(ResourceType::FindIndex(code));
 		row->SetResourceName(name);
 		row->SetResourceSize(size);
 		row->SetResourceCode(code);
