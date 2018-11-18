@@ -30,7 +30,7 @@ struct ResourceType {
 };
 
 
-#define LINE	"", "", "", ~0, NULL
+#define LINE	"", "", "", 0, NULL
 #define END		NULL, NULL, NULL, 0, NULL
 
 const ResourceType kDefaultTypes[] = {

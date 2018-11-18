@@ -1,10 +1,11 @@
 /*
- * Copyright 2007-2012 Haiku, Inc.
+ * Copyright 2007-2015 Haiku, Inc.
  * Distributed under the terms of the MIT License.
  *
  * Authors:
  *		Ryan Leavengood <leavengood@gmail.com>
  *		John Scipione <jscipione@gmail.com>
+ *		Joseph Groover <looncraz@looncraz.net>
  */
 
 
@@ -42,12 +43,15 @@ static const float kStripeWidth = 30.0;
 
 using BPrivate::gSystemCatalog;
 
+
 #undef B_TRANSLATION_CONTEXT
 #define B_TRANSLATION_CONTEXT "AboutWindow"
 
 
+namespace BPrivate {
+
 class StripeView : public BView {
- public:
+public:
 							StripeView(BBitmap* icon);
 	virtual					~StripeView();
 
@@ -56,16 +60,18 @@ class StripeView : public BView {
 			BBitmap*		Icon() const { return fIcon; };
 			void			SetIcon(BBitmap* icon);
 
- private:
+private:
 			BBitmap*		fIcon;
 };
 
 
 class AboutView : public BGroupView {
- public:
+public:
 							AboutView(const char* name,
 								const char* signature);
 	virtual					~AboutView();
+
+	virtual	void			AllAttached();
 
 			BTextView*		InfoView() const { return fInfoView; };
 
@@ -78,11 +84,11 @@ class AboutView : public BGroupView {
 			const char*		Version();
 			status_t		SetVersion(const char* version);
 
- protected:
+private:
 			const char*		_GetVersionFromSignature(const char* signature);
 			BBitmap*		_GetIconFromSignature(const char* signature);
 
- private:
+private:
 			BStringView*	fNameView;
 			BStringView*	fVersionView;
 			BTextView*		fInfoView;
@@ -90,7 +96,7 @@ class AboutView : public BGroupView {
 };
 
 
-//	#pragma mark -
+//	#pragma mark - StripeView
 
 
 StripeView::StripeView(BBitmap* icon)
@@ -98,13 +104,13 @@ StripeView::StripeView(BBitmap* icon)
 	BView("StripeView", B_WILL_DRAW),
 	fIcon(icon)
 {
-	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
+	SetViewUIColor(B_PANEL_BACKGROUND_COLOR);
 
 	float width = 0.0f;
 	if (icon != NULL)
-		width += icon->Bounds().Width() + 32.0f;
+		width += icon->Bounds().Width() + 24.0f;
 
-	SetExplicitMinSize(BSize(width, B_SIZE_UNSET));
+	SetExplicitSize(BSize(width, B_SIZE_UNSET));
 	SetExplicitPreferredSize(BSize(width, B_SIZE_UNLIMITED));
 }
 
@@ -144,9 +150,9 @@ StripeView::SetIcon(BBitmap* icon)
 
 	float width = 0.0f;
 	if (icon != NULL)
-		width += icon->Bounds().Width() + 32.0f;
+		width += icon->Bounds().Width() + 24.0f;
 
-	SetExplicitMinSize(BSize(width, B_SIZE_UNSET));
+	SetExplicitSize(BSize(width, B_SIZE_UNSET));
 	SetExplicitPreferredSize(BSize(width, B_SIZE_UNLIMITED));
 };
 
@@ -158,6 +164,7 @@ AboutView::AboutView(const char* appName, const char* signature)
 	:
 	BGroupView("AboutView", B_VERTICAL)
 {
+	SetViewUIColor(B_PANEL_BACKGROUND_COLOR);
 	fNameView = new BStringView("name", appName);
 	BFont font;
 	fNameView->GetFont(&font);
@@ -165,17 +172,18 @@ AboutView::AboutView(const char* appName, const char* signature)
 	font.SetSize(font.Size() * 2.0);
 	fNameView->SetFont(&font, B_FONT_FAMILY_AND_STYLE | B_FONT_SIZE
 		| B_FONT_FLAGS);
+	fNameView->SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET));
 
 	fVersionView = new BStringView("version",
 		_GetVersionFromSignature(signature));
+	fVersionView->SetExplicitMaxSize(BSize(B_SIZE_UNLIMITED, B_SIZE_UNSET));
 
-	fInfoView = new BTextView("info", B_WILL_DRAW);
+	rgb_color documentColor = ui_color(B_DOCUMENT_TEXT_COLOR);
+	fInfoView = new BTextView("info", NULL, &documentColor, B_WILL_DRAW);
 	fInfoView->SetExplicitMinSize(BSize(210.0, 160.0));
 	fInfoView->MakeEditable(false);
 	fInfoView->SetWordWrap(true);
 	fInfoView->SetInsets(5.0, 5.0, 5.0, 5.0);
-	fInfoView->SetViewColor(ui_color(B_DOCUMENT_BACKGROUND_COLOR));
-	fInfoView->SetHighColor(ui_color(B_DOCUMENT_TEXT_COLOR));
 	fInfoView->SetStylable(true);
 
 	BScrollView* infoViewScroller = new BScrollView(
@@ -184,25 +192,29 @@ AboutView::AboutView(const char* appName, const char* signature)
 
 	fStripeView = new StripeView(_GetIconFromSignature(signature));
 
-	const char* ok = B_TRANSLATE_MARK("Ok");
+	const char* ok = B_TRANSLATE_MARK("OK");
 	BButton* closeButton = new BButton("ok",
 		gSystemCatalog.GetString(ok, "AboutWindow"),
 		new BMessage(B_QUIT_REQUESTED));
 
 	GroupLayout()->SetSpacing(0);
-	BLayoutBuilder::Group<>(this)
-		.AddGroup(B_HORIZONTAL, 0)
-			.Add(fStripeView)
-			.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
-				.SetInsets(0, B_USE_DEFAULT_SPACING,
-					B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING)
+	BLayoutBuilder::Group<>(this, B_HORIZONTAL, 0)
+		.Add(fStripeView)
+		.AddGroup(B_VERTICAL)
+			.SetInsets(0, B_USE_DEFAULT_SPACING,
+				B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING)
+			.AddGroup(B_VERTICAL, 0)
 				.Add(fNameView)
 				.Add(fVersionView)
+				.AddStrut(B_USE_SMALL_SPACING)
 				.Add(infoViewScroller)
+				.End()
+			.AddGroup(B_HORIZONTAL, 0)
+				.AddGlue()
 				.Add(closeButton)
 				.End()
-			.AddGlue()
-			.End();
+			.End()
+		.View()->SetViewUIColor(B_PANEL_BACKGROUND_COLOR);
 }
 
 
@@ -211,7 +223,16 @@ AboutView::~AboutView()
 }
 
 
-//	#pragma mark - AboutView protected methods
+void
+AboutView::AllAttached()
+{
+	fNameView->SetViewUIColor(B_PANEL_BACKGROUND_COLOR);
+	fInfoView->SetViewUIColor(B_DOCUMENT_BACKGROUND_COLOR);
+	fVersionView->SetViewUIColor(B_PANEL_BACKGROUND_COLOR);
+}
+
+
+//	#pragma mark - AboutView private methods
 
 
 const char*
@@ -290,8 +311,8 @@ AboutView::_GetIconFromSignature(const char* signature)
 	if (appMime.InitCheck() != B_OK)
 		return NULL;
 
-	BBitmap* icon = new BBitmap(BRect(0.0, 0.0, 127.0, 127.0), B_RGBA32);
-	if (appMime.GetIcon(icon, (icon_size)128) == B_OK)
+	BBitmap* icon = new BBitmap(BRect(0.0, 0.0, 63.0, 63.0), B_RGBA32);
+	if (appMime.GetIcon(icon, (icon_size)64) == B_OK)
 		return icon;
 
 	delete icon;
@@ -300,6 +321,28 @@ AboutView::_GetIconFromSignature(const char* signature)
 
 
 //	#pragma mark - AboutView public methods
+
+
+BBitmap*
+AboutView::Icon()
+{
+	if (fStripeView == NULL)
+		return NULL;
+
+	return fStripeView->Icon();
+}
+
+
+status_t
+AboutView::SetIcon(BBitmap* icon)
+{
+	if (fStripeView == NULL)
+		return B_NO_INIT;
+
+	fStripeView->SetIcon(icon);
+
+	return B_OK;
+}
 
 
 const char*
@@ -333,36 +376,17 @@ AboutView::SetVersion(const char* version)
 	return B_OK;
 }
 
-
-BBitmap*
-AboutView::Icon()
-{
-	if (fStripeView == NULL)
-		return NULL;
-
-	return fStripeView->Icon();
-}
-
-
-status_t
-AboutView::SetIcon(BBitmap* icon)
-{
-	if (fStripeView == NULL)
-		return B_NO_INIT;
-
-	fStripeView->SetIcon(icon);
-
-	return B_OK;
-}
+} // namespace BPrivate
 
 
 //	#pragma mark - BAboutWindow
 
 
 BAboutWindow::BAboutWindow(const char* appName, const char* signature)
-	:	BWindow(BRect(0.0, 0.0, 200.0, 200.0), appName, B_MODAL_WINDOW,
-		B_ASYNCHRONOUS_CONTROLS | B_NOT_ZOOMABLE | B_NOT_RESIZABLE 
-		| B_AUTO_UPDATE_SIZE_LIMITS | B_CLOSE_ON_ESCAPE)
+	:
+	BWindow(BRect(0.0, 0.0, 400.0, 200.0), appName, B_MODAL_WINDOW,
+		B_ASYNCHRONOUS_CONTROLS | B_NOT_ZOOMABLE
+			| B_AUTO_UPDATE_SIZE_LIMITS | B_CLOSE_ON_ESCAPE)
 {
 	SetLayout(new BGroupLayout(B_VERTICAL));
 
@@ -373,7 +397,7 @@ BAboutWindow::BAboutWindow(const char* appName, const char* signature)
 	title.ReplaceFirst("%app%", appName);
 	SetTitle(title.String());
 
-	fAboutView = new AboutView(appName, signature);
+	fAboutView = new BPrivate::AboutView(appName, signature);
 	AddChild(fAboutView);
 
 	MoveTo(AboutPosition(Frame().Width(), Frame().Height()));
@@ -415,9 +439,9 @@ BAboutWindow::AboutPosition(float width, float height)
 		dynamic_cast<BWindow*>(BLooper::LooperForThread(find_thread(NULL)));
 
 	BScreen screen(window);
- 	BRect screenFrame(0, 0, 640, 480);
- 	if (screen.IsValid())
- 		screenFrame = screen.Frame();
+	BRect screenFrame(0, 0, 640, 480);
+	if (screen.IsValid())
+		screenFrame = screen.Frame();
 
 	// Horizontally, we're smack in the middle
 	result.x = screenFrame.left + (screenFrame.Width() / 2.0) - (width / 2.0);
@@ -575,6 +599,20 @@ BAboutWindow::AddText(const char* header, const char** contents)
 }
 
 
+BBitmap*
+BAboutWindow::Icon()
+{
+	return fAboutView->Icon();
+}
+
+
+void
+BAboutWindow::SetIcon(BBitmap* icon)
+{
+	fAboutView->SetIcon(icon);
+}
+
+
 const char*
 BAboutWindow::Name()
 {
@@ -603,16 +641,25 @@ BAboutWindow::SetVersion(const char* version)
 }
 
 
-BBitmap*
-BAboutWindow::Icon()
-{
-	return fAboutView->Icon();
-}
+// FBC padding
 
-
-void
-BAboutWindow::SetIcon(BBitmap* icon)
-{
-	fAboutView->SetIcon(icon);
-}
-
+void BAboutWindow::_ReservedAboutWindow20() {}
+void BAboutWindow::_ReservedAboutWindow19() {}
+void BAboutWindow::_ReservedAboutWindow18() {}
+void BAboutWindow::_ReservedAboutWindow17() {}
+void BAboutWindow::_ReservedAboutWindow16() {}
+void BAboutWindow::_ReservedAboutWindow15() {}
+void BAboutWindow::_ReservedAboutWindow14() {}
+void BAboutWindow::_ReservedAboutWindow13() {}
+void BAboutWindow::_ReservedAboutWindow12() {}
+void BAboutWindow::_ReservedAboutWindow11() {}
+void BAboutWindow::_ReservedAboutWindow10() {}
+void BAboutWindow::_ReservedAboutWindow9() {}
+void BAboutWindow::_ReservedAboutWindow8() {}
+void BAboutWindow::_ReservedAboutWindow7() {}
+void BAboutWindow::_ReservedAboutWindow6() {}
+void BAboutWindow::_ReservedAboutWindow5() {}
+void BAboutWindow::_ReservedAboutWindow4() {}
+void BAboutWindow::_ReservedAboutWindow3() {}
+void BAboutWindow::_ReservedAboutWindow2() {}
+void BAboutWindow::_ReservedAboutWindow1() {}

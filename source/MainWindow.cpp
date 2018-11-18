@@ -630,7 +630,7 @@ MainWindow::_Save(BEntry* entry)
 
 	// Killed code: Export to .rsrc
 
-	/*BFile* file = new BFile(entry, B_READ_WRITE | B_CREATE_FILE);
+	BFile* file = new BFile(entry, B_READ_WRITE | B_CREATE_FILE);
 	BResources output(file, true);
 	delete file;
 
@@ -638,10 +638,10 @@ MainWindow::_Save(BEntry* entry)
 		ResourceRow* row = (ResourceRow*)fResourceList->RowAt(i);
 
 		output.AddResource(row->ResourceCode(), row->ResourceID(),
-			row->ResourceRawData(), row->ResourceSize(), row->ResourceName());
+			row->ResourceData(), row->ResourceSize(), row->ResourceName());
 	}
 
-	output.Sync();*/
+	output.Sync();
 
 	fUnsavedChanges = false;
 }
@@ -653,7 +653,6 @@ MainWindow::_Load()
 	// CAUTION: Here be dragons.
 
 	// [Initialization phase]
-
 	BPath path;
 	struct stat st;
 
@@ -922,7 +921,7 @@ MainWindow::_Load()
 
 	// Killed code: Import from .rsrc
 
-	/*BFile* file = new BFile(fAssocEntry, B_READ_ONLY);
+	BFile* file = new BFile(fAssocEntry, B_READ_ONLY);
 	BResources input(file);
 	delete file;
 
@@ -934,12 +933,15 @@ MainWindow::_Load()
 	for (int32 i = 0; input.GetResourceInfo(i, &code, &id, &name, &size); i++) {
 		ResourceRow* row = new ResourceRow();
 		row->SetResourceID(id);
+		// There's currently no support for CSTR, ARRAY...
+		int32 ix = ResourceType::FindIndex(code);
+		row->SetResourceType(kDefaultTypes[ix != -1 ? ix : 0].type);
 		row->SetResourceName(name);
 		row->SetResourceSize(size);
 		row->SetResourceCode(code);
-		row->SetResourceRawData(input.LoadResource(code, id, &size));
+		row->SetResourceData((char*)input.LoadResource(code, id, &size));
 		fResourceList->AddRow(row);
-	}*/
+	}
 }
 
 
