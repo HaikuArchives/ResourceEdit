@@ -6,7 +6,6 @@
 
 #include "ResourceEdit.h"
 
-#include "AboutWindow.h"
 #include "Constants.h"
 #include "MainWindow.h"
 #include "SettingsFile.h"
@@ -14,7 +13,6 @@
 
 #include <Entry.h>
 #include <FilePanel.h>
-
 
 ResourceEdit::ResourceEdit()
 	:
@@ -101,8 +99,15 @@ ResourceEdit::MessageReceived(BMessage* msg)
 			break;
 		}
 		case MSG_SETTINGS_CLOSED:
+		{
 			fSettingsWindow = NULL;
 			break;
+		}
+		case B_ABOUT_REQUESTED:
+		{
+			AboutRequested();
+		}
+		break;
 
 		default:
 			BApplication::MessageReceived(msg);

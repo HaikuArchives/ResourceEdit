@@ -28,6 +28,7 @@
 #include <MenuItem.h>
 #include <Path.h>
 #include <PopUpMenu.h>
+#include <private/interface/AboutWindow.h>
 #include <Resources.h>
 #include <String.h>
 #include <StringView.h>
@@ -95,6 +96,7 @@ MainWindow::MainWindow(BRect frame, BEntry* assocEntry, SettingsFile* settings)
 	fSettingsItem = new BMenuItem("Settings", new BMessage(MSG_SETTINGS));
 
 	fHelpMenu = new BMenu("Help", B_ITEMS_IN_COLUMN);
+	fAboutItem = new BMenuItem("About", new BMessage(B_ABOUT_REQUESTED));
 
 	fResourceIDText = new BTextControl(BRect(0, 0, 47, 23).OffsetBySelf(8, 24),
 		"fResourceIDText", NULL, "0", NULL);
@@ -205,6 +207,7 @@ MainWindow::MainWindow(BRect frame, BEntry* assocEntry, SettingsFile* settings)
 		fToolsMenu->AddItem(fSettingsItem);
 
 	fMenuBar->AddItem(fHelpMenu);
+		fHelpMenu->AddItem(fAboutItem);
 
 	fToolbarView->AddChild(fResourceIDText);
 	fToolbarView->AddChild(fResourceTypeMenu);
@@ -234,6 +237,24 @@ MainWindow::~MainWindow()
 	delete fUndoContext;
 }
 
+void
+MainWindow::AboutRequested()
+{
+	BAboutWindow* about = new BAboutWindow("ResourceEdit","x-vnd.Haiku-ResourceEdit");
+	
+	const char* authors[] = {
+		"Tri-Edge AI",
+		"waddlesplash",
+		"Panagiotis Vasilopoulos",
+		"Artur Jamro",
+		NULL
+	};
+
+	about->AddCopyright(2012-2013, "Tri-Edge AI");
+	about->AddAuthors(authors);
+	about->AddText("Distributed under the terms of the MIT license");
+	about->Show();
+}
 
 bool
 MainWindow::QuitRequested()
