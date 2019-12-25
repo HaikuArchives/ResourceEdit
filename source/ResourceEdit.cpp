@@ -106,8 +106,8 @@ ResourceEdit::MessageReceived(BMessage* msg)
 		case B_ABOUT_REQUESTED:
 		{
 			AboutRequested();
+			break;
 		}
-		break;
 
 		default:
 			BApplication::MessageReceived(msg);
