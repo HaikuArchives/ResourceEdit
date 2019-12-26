@@ -28,12 +28,12 @@ class BPopUpMenu;
 class BStringView;
 class BTextControl;
 
-
 class MainWindow : public BWindow {
 public:
 						MainWindow(BRect frame, BEntry* entry, SettingsFile* settings);
 						~MainWindow();
 
+	void				AboutRequested();
 	bool				QuitRequested();
 	void				MouseDown(BPoint point);
 	void				MessageReceived(BMessage* msg);
@@ -76,6 +76,7 @@ private:
 	BMenuItem*			fSettingsItem;
 
 	BMenu*				fHelpMenu;
+	BMenuItem*			fAboutItem;
 
 	BTextControl*		fResourceIDText;
 	BPopUpMenu*			fResourceTypePopUp;

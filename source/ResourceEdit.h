@@ -17,14 +17,12 @@ class BEntry;
 class BFilePanel;
 class BMessage;
 
-
 class ResourceEdit : public BApplication {
 public:
 					ResourceEdit();
 					~ResourceEdit();
 
 	void			MessageReceived(BMessage* msg);
-
 private:
 	BRect			fCascade;
 	uint32			fCascadeCount;
