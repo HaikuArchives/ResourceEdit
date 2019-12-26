@@ -103,11 +103,6 @@ ResourceEdit::MessageReceived(BMessage* msg)
 			fSettingsWindow = NULL;
 			break;
 		}
-		case B_ABOUT_REQUESTED:
-		{
-			AboutRequested();
-			break;
-		}
 
 		default:
 			BApplication::MessageReceived(msg);

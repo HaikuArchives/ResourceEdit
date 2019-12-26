@@ -538,8 +538,15 @@ MainWindow::MessageReceived(BMessage* msg)
 			break;
 		}
 		case MSG_SETTINGS_APPLY:
+		{
 			AdaptSettings();
 			break;
+                }
+		case B_ABOUT_REQUESTED:
+                {
+                        AboutRequested();
+                        break;
+                }
 
 		default:
 			BWindow::MessageReceived(msg);
