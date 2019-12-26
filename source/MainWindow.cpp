@@ -96,7 +96,8 @@ MainWindow::MainWindow(BRect frame, BEntry* assocEntry, SettingsFile* settings)
 	fSettingsItem = new BMenuItem("Settings", new BMessage(MSG_SETTINGS));
 
 	fHelpMenu = new BMenu("Help", B_ITEMS_IN_COLUMN);
-	fAboutItem = new BMenuItem("About", new BMessage(B_ABOUT_REQUESTED));
+	fAboutItem = new BMenuItem("About ResourceEdit", new 
+BMessage(B_ABOUT_REQUESTED));
 
 	fResourceIDText = new BTextControl(BRect(0, 0, 47, 23).OffsetBySelf(8, 24),
 		"fResourceIDText", NULL, "0", NULL);
@@ -240,17 +241,18 @@ MainWindow::~MainWindow()
 void
 MainWindow::AboutRequested()
 {
-	BAboutWindow* about = new BAboutWindow("ResourceEdit","x-vnd.Haiku-ResourceEdit");
+	BAboutWindow* about = new 
+BAboutWindow("ResourceEdit","application/x-vnd.Haiku-ResourceEdit");
 	
 	const char* authors[] = {
+		"Artur Jamro",
+		"Panagiotis Vasilopoulos",
 		"Tri-Edge AI",
 		"waddlesplash",
-		"Panagiotis Vasilopoulos",
-		"Artur Jamro",
 		NULL
 	};
 
-	about->AddCopyright(2012-2013, "Tri-Edge AI");
+	about->AddCopyright(2012, "Tri-Edge AI");
 	about->AddAuthors(authors);
 	about->AddText("Distributed under the terms of the MIT license");
 	about->Show();

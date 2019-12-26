@@ -12,7 +12,6 @@
 class MainWindow;
 class SettingsFile;
 class SettingsWindow;
-class BAboutWindow;
 
 class BEntry;
 class BFilePanel;
@@ -24,7 +23,6 @@ public:
 					~ResourceEdit();
 
 	void			MessageReceived(BMessage* msg);
-//	void			AboutRequested();
 private:
 	BRect			fCascade;
 	uint32			fCascadeCount;
