@@ -14,7 +14,7 @@
 #define MSG_SAVEAS			'm005'
 #define MSG_SAVEAS_DONE		'm006'
 #define MSG_SAVEALL			'm007'
-#define MSG_MERGEWITH		'm008'
+#define MSG_MERGEFROM		'm008'
 #define MSG_QUIT			'm009'
 
 #define MSG_UNDO			'm010'
@@ -43,6 +43,8 @@
 #define MSG_SETTINGS_APPLY	'm022'
 #define MSG_SETTINGS_REVERT	'm023'
 #define MSG_SETTINGS_CLOSED	'm024'
+
+#define MSG_MERGE_OPEN_DONE	'm025'
 
 // TODO: Remove prior to release.
 #define DEBUG 1

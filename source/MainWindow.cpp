@@ -71,8 +71,8 @@ MainWindow::MainWindow(BRect frame, BEntry* assocEntry, SettingsFile* settings)
 		BMessage(MSG_SAVEAS));
 	fSaveAllItem = new BMenuItem("Save All", new BMessage(MSG_SAVEALL), 'S',
 		B_SHIFT_KEY);
-	fMergeWithItem = new BMenuItem("Merge With" B_UTF8_ELLIPSIS,
-		new BMessage(MSG_MERGEWITH), 'M');
+	fMergeFromItem = new BMenuItem("Merge From" B_UTF8_ELLIPSIS,
+		new BMessage(MSG_MERGEFROM), 'M');
 	fQuitItem = new BMenuItem("Quit", new BMessage(MSG_QUIT), 'Q');
 
 	fEditMenu = new BMenu("Edit", B_ITEMS_IN_COLUMN);
@@ -187,7 +187,7 @@ BMessage(B_ABOUT_REQUESTED));
 		fFileMenu->AddItem(fSaveItem);
 		fFileMenu->AddItem(fSaveAsItem);
 		fFileMenu->AddItem(fSaveAllItem);
-		fFileMenu->AddItem(fMergeWithItem);
+		fFileMenu->AddItem(fMergeFromItem);
 		fFileMenu->AddSeparatorItem();
 		fFileMenu->AddItem(fQuitItem);
 
@@ -223,6 +223,9 @@ BMessage(B_ABOUT_REQUESTED));
 	AddChild(fResourceList);
 	fResourceList->AddStatusView(fStatsBox);
 	fStatsBox->AddChild(fStatsString);
+
+	fMergePanel = new BFilePanel(B_OPEN_PANEL, new BMessenger(this), NULL, 0, true,
+		new BMessage(MSG_MERGE_OPEN_DONE));
 
 	if (assocEntry != NULL) {
 		_SetTitleFromEntry();
@@ -385,11 +388,21 @@ MainWindow::MessageReceived(BMessage* msg)
 			be_app->PostMessage(MSG_SAVEALL);
 			break;
 
-		case MSG_MERGEWITH:
-			PRINT(("[MSG_MERGEWITH]: Not yet implemented."));
-			// TODO: Implement.
-			// "Merge from..." might be a better idea actually.
+		case MSG_MERGEFROM:
+			fMergePanel->Show();
 			break;
+
+		case MSG_MERGE_OPEN_DONE:
+		{
+			//load the selected file
+			entry_ref mergeRef;
+			while (fMergePanel->GetNextSelectedRef(&mergeRef) == B_OK) {
+				fAssocEntry = new BEntry(&mergeRef, true);
+				_Load();
+				fUnsavedChanges = true;
+			}
+			break;
+		}
 
 		case MSG_QUIT:
 			be_app->PostMessage(B_QUIT_REQUESTED);
