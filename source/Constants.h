@@ -14,7 +14,7 @@
 #define MSG_SAVEAS			'm005'
 #define MSG_SAVEAS_DONE		'm006'
 #define MSG_SAVEALL			'm007'
-#define MSG_MERGEFROM		'm008'
+#define MSG_MERGEWITH		'm008'
 #define MSG_QUIT			'm009'
 
 #define MSG_UNDO			'm010'

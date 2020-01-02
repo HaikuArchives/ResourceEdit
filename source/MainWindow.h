@@ -60,7 +60,7 @@ private:
 	BMenuItem*			fSaveItem;
 	BMenuItem*			fSaveAsItem;
 	BMenuItem*			fSaveAllItem;
-	BMenuItem*			fMergeFromItem;
+	BMenuItem*			fMergeWithItem;
 	BMenuItem*			fQuitItem;
 
 	BMenu*				fEditMenu;

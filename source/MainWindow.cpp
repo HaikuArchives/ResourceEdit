@@ -71,8 +71,8 @@ MainWindow::MainWindow(BRect frame, BEntry* assocEntry, SettingsFile* settings)
 		BMessage(MSG_SAVEAS));
 	fSaveAllItem = new BMenuItem("Save All", new BMessage(MSG_SAVEALL), 'S',
 		B_SHIFT_KEY);
-	fMergeFromItem = new BMenuItem("Merge From" B_UTF8_ELLIPSIS,
-		new BMessage(MSG_MERGEFROM), 'M');
+	fMergeWithItem = new BMenuItem("Merge With" B_UTF8_ELLIPSIS,
+		new BMessage(MSG_MERGEWITH), 'M');
 	fQuitItem = new BMenuItem("Quit", new BMessage(MSG_QUIT), 'Q');
 
 	fEditMenu = new BMenu("Edit", B_ITEMS_IN_COLUMN);
@@ -187,7 +187,7 @@ BMessage(B_ABOUT_REQUESTED));
 		fFileMenu->AddItem(fSaveItem);
 		fFileMenu->AddItem(fSaveAsItem);
 		fFileMenu->AddItem(fSaveAllItem);
-		fFileMenu->AddItem(fMergeFromItem);
+		fFileMenu->AddItem(fMergeWithItem);
 		fFileMenu->AddSeparatorItem();
 		fFileMenu->AddItem(fQuitItem);
 
@@ -224,8 +224,11 @@ BMessage(B_ABOUT_REQUESTED));
 	fResourceList->AddStatusView(fStatsBox);
 	fStatsBox->AddChild(fStatsString);
 
-	fMergePanel = new BFilePanel(B_OPEN_PANEL, new BMessenger(this), NULL, 0, true,
-		new BMessage(MSG_MERGE_OPEN_DONE));
+	BMessenger panelMessenger(this);
+	BMessage panelMessage(MSG_MERGE_OPEN_DONE);
+
+	fMergePanel = new BFilePanel(B_OPEN_PANEL, &panelMessenger, NULL, 0, true,
+		&panelMessage);
 
 	if (assocEntry != NULL) {
 		_SetTitleFromEntry();
@@ -388,7 +391,7 @@ MainWindow::MessageReceived(BMessage* msg)
 			be_app->PostMessage(MSG_SAVEALL);
 			break;
 
-		case MSG_MERGEFROM:
+		case MSG_MERGEWITH:
 			fMergePanel->Show();
 			break;
 
