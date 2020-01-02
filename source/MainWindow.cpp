@@ -242,6 +242,7 @@ BMessage(B_ABOUT_REQUESTED));
 MainWindow::~MainWindow()
 {
 	delete fUndoContext;
+	delete fMergePanel;
 }
 
 void
@@ -403,6 +404,7 @@ MainWindow::MessageReceived(BMessage* msg)
 				fAssocEntry = new BEntry(&mergeRef, true);
 				_Load();
 				fUnsavedChanges = true;
+				fAssocEntry = NULL;
 			}
 			break;
 		}
