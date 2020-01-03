@@ -282,7 +282,7 @@ MainWindow::QuitRequested()
 			strcpy(nameBuffer, "Untitled");
 
 		BString warning = "";
-		warning << "Save changse to'";
+		warning << "Save changes to'";
 		warning << nameBuffer;
 		warning << "' before closing?";
 
@@ -398,14 +398,15 @@ MainWindow::MessageReceived(BMessage* msg)
 
 		case MSG_MERGE_OPEN_DONE:
 		{
-			//load the selected file
 			entry_ref mergeRef;
+			BEntry tempAssocEntry = *fAssocEntry;
 			while (fMergePanel->GetNextSelectedRef(&mergeRef) == B_OK) {
 				fAssocEntry = new BEntry(&mergeRef, true);
 				_Load();
 				fUnsavedChanges = true;
-				fAssocEntry = NULL;
+				delete fAssocEntry;
 			}
+			fAssocEntry = &tempAssocEntry;
 			break;
 		}
 
