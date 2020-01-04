@@ -225,10 +225,10 @@ BMessage(B_ABOUT_REQUESTED));
 	fStatsBox->AddChild(fStatsString);
 
 	BMessenger panelMessenger(this);
-	BMessage panelMessage(MSG_MERGE_OPEN_DONE);
 
-	fMergePanel = new BFilePanel(B_OPEN_PANEL, &panelMessenger, NULL, 0, true,
-		&panelMessage);
+	fMergePanel = new BFilePanel(B_OPEN_PANEL, &panelMessenger);
+	fMergePanel->SetButtonLabel(B_DEFAULT_BUTTON, "Merge");
+	fMergePanel->SetRefFilter();
 
 	if (assocEntry != NULL) {
 		_SetTitleFromEntry();
@@ -396,17 +396,17 @@ MainWindow::MessageReceived(BMessage* msg)
 			fMergePanel->Show();
 			break;
 
-		case MSG_MERGE_OPEN_DONE:
+		case B_REFS_RECEIVED:
 		{
 			entry_ref mergeRef;
-			BEntry tempAssocEntry = *fAssocEntry;
+			BEntry* tempAssocEntry = fAssocEntry;
 			while (fMergePanel->GetNextSelectedRef(&mergeRef) == B_OK) {
 				fAssocEntry = new BEntry(&mergeRef, true);
 				_Load();
 				fUnsavedChanges = true;
 				delete fAssocEntry;
 			}
-			fAssocEntry = &tempAssocEntry;
+			fAssocEntry = tempAssocEntry;
 			break;
 		}
 

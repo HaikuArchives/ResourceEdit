@@ -44,8 +44,6 @@
 #define MSG_SETTINGS_REVERT	'm023'
 #define MSG_SETTINGS_CLOSED	'm024'
 
-#define MSG_MERGE_OPEN_DONE	'm025'
-
 // TODO: Remove prior to release.
 #define DEBUG 1
 #include <Debug.h>
