@@ -224,6 +224,12 @@ BMessage(B_ABOUT_REQUESTED));
 	fResourceList->AddStatusView(fStatsBox);
 	fStatsBox->AddChild(fStatsString);
 
+	BMessenger panelMessenger(this);
+
+	fMergePanel = new BFilePanel(B_OPEN_PANEL, &panelMessenger);
+	fMergePanel->SetButtonLabel(B_DEFAULT_BUTTON, "Merge");
+	fMergePanel->Window()->SetTitle("ResourceEdit: Merge");
+
 	if (assocEntry != NULL) {
 		_SetTitleFromEntry();
 		_Load();
@@ -236,6 +242,7 @@ BMessage(B_ABOUT_REQUESTED));
 MainWindow::~MainWindow()
 {
 	delete fUndoContext;
+	delete fMergePanel;
 }
 
 void
@@ -275,7 +282,7 @@ MainWindow::QuitRequested()
 			strcpy(nameBuffer, "Untitled");
 
 		BString warning = "";
-		warning << "Save changse to'";
+		warning << "Save changes to'";
 		warning << nameBuffer;
 		warning << "' before closing?";
 
@@ -386,10 +393,22 @@ MainWindow::MessageReceived(BMessage* msg)
 			break;
 
 		case MSG_MERGEWITH:
-			PRINT(("[MSG_MERGEWITH]: Not yet implemented."));
-			// TODO: Implement.
-			// "Merge from..." might be a better idea actually.
+			fMergePanel->Show();
 			break;
+
+		case B_REFS_RECEIVED:
+		{
+			entry_ref mergeRef;
+			BEntry* tempAssocEntry = fAssocEntry;
+			while (fMergePanel->GetNextSelectedRef(&mergeRef) == B_OK) {
+				fAssocEntry = new BEntry(&mergeRef, true);
+				_Load();
+				fUnsavedChanges = true;
+				delete fAssocEntry;
+			}
+			fAssocEntry = tempAssocEntry;
+			break;
+		}
 
 		case MSG_QUIT:
 			be_app->PostMessage(B_QUIT_REQUESTED);

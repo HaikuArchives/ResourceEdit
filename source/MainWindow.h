@@ -46,6 +46,7 @@ private:
 	SettingsFile*		fSettings;
 
 	BFilePanel*			fSavePanel;
+	BFilePanel*			fMergePanel;
 	bool				fUnsavedChanges;
 
 	UndoContext*		fUndoContext;
