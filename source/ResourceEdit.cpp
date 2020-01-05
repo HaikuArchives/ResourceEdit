@@ -22,7 +22,7 @@ ResourceEdit::ResourceEdit()
 	fCascadeCount = 0;
 
 	fOpenPanel = new BFilePanel(B_OPEN_PANEL, &be_app_messenger, NULL, 0, true,
-		new BMessage(MSG_OPEN_DONE));
+		new BMessage(MSG_OPEN_DONE), &fRSRCFilter);
 
 	fSettings = new SettingsFile("resourceedit_settings");
 	fSettings->Load();

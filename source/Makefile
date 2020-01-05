@@ -5,7 +5,8 @@ SRCS= DefaultTypes.cpp EditWindow.cpp main.cpp MainWindow.cpp ResourceEdit.cpp \
 	edits/BooleanEdit.cpp edits/AppFlagsEdit.cpp interface/ImageButton.cpp \
 	interface/AboutWindow.cpp \
 	settings/GenericSettingsView.cpp ResourceRow.cpp support/UndoContext.cpp \
-	SettingsWindow.cpp SettingsFile.cpp
+	SettingsWindow.cpp SettingsFile.cpp \
+	RSRCFilter.cpp
 RSRCS=
 LIBS= be root $(STDCPPLIBS) translation tracker columnlistview
 RDEFS= ResourceEdit.rdef

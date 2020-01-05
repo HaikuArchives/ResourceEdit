@@ -229,6 +229,7 @@ BMessage(B_ABOUT_REQUESTED));
 	fMergePanel = new BFilePanel(B_OPEN_PANEL, &panelMessenger);
 	fMergePanel->SetButtonLabel(B_DEFAULT_BUTTON, "Merge");
 	fMergePanel->Window()->SetTitle("ResourceEdit: Merge");
+	fMergePanel->SetRefFilter(&fRSRCFilter);
 
 	if (assocEntry != NULL) {
 		_SetTitleFromEntry();
