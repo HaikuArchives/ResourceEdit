@@ -3,6 +3,12 @@
 #include <MimeType.h>
 #include <string.h>
 
+static const char* supported_types[] = {
+	"application/x-vnd.Be-elfexecutable",
+	"application/octet-stream",
+	NULL
+};
+	
 bool
 RSRCFilter::Filter(const entry_ref* ref, BNode* node, struct stat_beos* st,
 	const char* filetype)
@@ -20,9 +26,11 @@ RSRCFilter::Filter(const entry_ref* ref, BNode* node, struct stat_beos* st,
 	BMimeType mimeType;
 	if (BMimeType::GuessMimeType(&entryRef, &mimeType) != B_OK)
 		return false;
-	
-	if (strcmp(mimeType.Type(), "application/octet-stream") == 0)
-		return true;
+
+	for (int i = 0; supported_types[i] != nullptr; i++) {
+		if (strcmp(mimeType.Type(), supported_types[i]) == 0)
+			return true;
+	}
 	
 	return false;
 }
