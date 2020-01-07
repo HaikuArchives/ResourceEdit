@@ -28,14 +28,12 @@ RSRCFilter::Filter(const entry_ref* ref, BNode* node, struct stat_beos* st,
 		return false;
 
 	for (int i = 0; supported_types[i] != NULL; i++) {
-		if (strcasecmp(mimeType.Type(), supported_types[i]) == 0)
-			if (strlen(entryRef.name) > 1) {
-				if (entryRef.name[strlen(entryRef.name)-1] != 'o'
-					&& entryRef.name[strlen(entryRef.name)-2] != '.')
-					return true;
-			} else {
-				return true;
-			}
+		if (strcasecmp(mimeType.Type(), supported_types[i]) != 0)
+			continue;
+		if (strlen(entryRef.name) < 3)
+			return true;
+		const char* secondToLast = &entryRef.name[strlen(entryRef.name) - 2];
+		return strcmp(secondToLast, ".o") != 0;
 	}
 
 	return false;
