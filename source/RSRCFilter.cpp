@@ -18,6 +18,7 @@ RSRCFilter::Filter(const entry_ref* ref, BNode* node, struct stat_beos* st,
 		return false;
 	if (entry.IsDirectory())
 		return true;
+	if (entry.
 
 	entry_ref entryRef;
 	if (entry.GetRef(&entryRef) != B_OK)
@@ -25,15 +26,18 @@ RSRCFilter::Filter(const entry_ref* ref, BNode* node, struct stat_beos* st,
 
 	BMimeType mimeType;
 	if (BMimeType::GuessMimeType(&entryRef, &mimeType) != B_OK)
-		return false;
+		return false;	
 
-	for (int i = 0; supported_types[i] != NULL; i++) {
-		if (strcasecmp(mimeType.Type(), supported_types[i]) != 0)
-			continue;
-		if (strlen(entryRef.name) < 3)
-			return true;
-		const char* secondToLast = &entryRef.name[strlen(entryRef.name) - 2];
-		return strcmp(secondToLast, ".o") != 0;
+	if (strcasecmp(filetype, supported_types[0]) == 0 ||
+		filetype == "" || strcasecmp(filetype, supported_types[1]) == 0) {
+		for (int i = 0; supported_types[i] != NULL; i++) {
+			if (strcasecmp(mimeType.Type(), supported_types[i]) != 0)
+				continue;
+			if (strlen(entryRef.name) < 3)
+				return true;
+			const char* secondToLast = &entryRef.name[strlen(entryRef.name) - 2];
+				return strcmp(secondToLast, ".o") != 0;
+		}
 	}
 
 	return false;
