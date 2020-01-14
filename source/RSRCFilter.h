@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Raheem Idowu <raheemidowu.com>
+ * Copyright 2020 Raheem Idowu <abdurraheemidowu@gmail.com>
  * All rights reserved. Distributed under the terms of the MIT license.
  */
 
