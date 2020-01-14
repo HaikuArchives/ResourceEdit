@@ -1,7 +1,15 @@
+/*
+ * Copyright 2020 Raheem Idowu <raheemidowu.com>
+ * All rights reserved. Distributed under the terms of the MIT license.
+ */
+
 #include "RSRCFilter.h"
 
 #include <MimeType.h>
+#include <NodeInfo.h>
 #include <string.h>
+
+#include <compat/sys/stat.h>
 
 static const char* supported_types[] = {
 	"application/x-vnd.be-elfexecutable",
@@ -21,6 +29,20 @@ RSRCFilter::Filter(const entry_ref* ref, BNode* node, struct stat_beos* st,
 	entry_ref entryRef;
 	if (entry.GetRef(&entryRef) != B_OK)
 		return false;
+
+	//Check if ref is a symlink
+	bool isLink = S_ISLNK(st->st_mode);
+	if (isLink) {
+		BNodeInfo * nodeInfo = new BNodeInfo(node);
+		char mimeType[B_MIME_TYPE_LENGTH];
+		if (nodeInfo->GetType(mimeType) != B_OK) {
+			delete nodeInfo;
+			return false;
+		} else {
+			delete nodeInfo;
+			filetype = mimeType;
+		}
+	}
 
 	//All files of non-BFS drives report as octet-stream or empty
 	if (strcasecmp(filetype, "application/octet-stream") == 0

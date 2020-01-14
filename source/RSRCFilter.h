@@ -1,3 +1,8 @@
+/*
+ * Copyright 2020 Raheem Idowu <raheemidowu.com>
+ * All rights reserved. Distributed under the terms of the MIT license.
+ */
+
 #ifndef RSRC_FILTER_H
 #define RSRC_FILTER_H
 
