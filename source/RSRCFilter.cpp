@@ -46,7 +46,7 @@ RSRCFilter::Filter(const entry_ref* ref, BNode* node, struct stat_beos* st,
 
 	//All files of non-BFS drives report as octet-stream or empty
 	if (strcasecmp(filetype, "application/octet-stream") == 0
-		|| filetype == "") {
+		|| filetype[0] == '\0') {
 		BMimeType mimeType;
 		if (BMimeType::GuessMimeType(&entryRef, &mimeType) != B_OK)
 			return false;
