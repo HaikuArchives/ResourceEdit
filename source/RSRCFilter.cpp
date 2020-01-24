@@ -30,11 +30,13 @@ RSRCFilter::Filter(const entry_ref* ref, BNode* node, struct stat_beos* st,
 	if (entry.GetRef(&entryRef) != B_OK)
 		return false;
 
+	char mimeType[B_MIME_TYPE_LENGTH];
+
 	//Check if ref is a symlink
 	bool isLink = S_ISLNK(st->st_mode);
 	if (isLink) {
-		BNodeInfo * nodeInfo = new BNodeInfo(node);
-		char mimeType[B_MIME_TYPE_LENGTH];
+		BNode traversedNode(&entry);
+		BNodeInfo * nodeInfo = new BNodeInfo(&traversedNode);
 		if (nodeInfo->GetType(mimeType) != B_OK) {
 			delete nodeInfo;
 			return false;
