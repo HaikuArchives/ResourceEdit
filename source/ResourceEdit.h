@@ -5,9 +5,9 @@
 #ifndef RESOURCE_EDIT_H
 #define RESOURCE_EDIT_H
 
+#include "RSRCFilter.h"
 
 #include <Application.h>
-
 
 class MainWindow;
 class SettingsFile;
@@ -29,6 +29,7 @@ private:
 	BList			fWindowList;
 
 	BFilePanel*		fOpenPanel;
+	RSRCFilter		fRSRCFilter;
 
 	SettingsFile*	fSettings;
 	SettingsWindow*	fSettingsWindow;

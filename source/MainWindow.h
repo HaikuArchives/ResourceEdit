@@ -7,6 +7,7 @@
 
 
 #include "UndoContext.h"
+#include "RSRCFilter.h"
 
 #include <Window.h>
 
@@ -48,6 +49,7 @@ private:
 	BFilePanel*			fSavePanel;
 	BFilePanel*			fMergePanel;
 	bool				fUnsavedChanges;
+	RSRCFilter			fRSRCFilter;
 
 	UndoContext*		fUndoContext;
 
